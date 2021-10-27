@@ -1,3 +1,35 @@
+	public static String infixToPostfix(String infixExp) {
+		// Initialize an empty stack
+		Stack<String> stk = new Stack<>();
+		// Initialize postfix string
+		StringBuilder postfix = new StringBuilder();
+		Scanner scanner = new Scanner(infixExp);
+		while (scanner.hasNext()) {
+			String token = scanner.next();
+			if (Character.isDigit(token.charAt(0))) { postfix.append(token).append(' '); }
+			// opening parenthesis
+			else if (token.equals("(")) { stk.push(token); }
+			// closing parenthesis
+			else if (token.equals(")")) {
+				while (!stk.peek().equals("(")) { postfix.append(stk.pop()).append(' '); }
+				stk.pop();
+			}
+			// operator
+			else {
+				while (!stk.isEmpty() && !stk.peek().equals("(") && precedence(token) <= precedence(stk.peek())) {
+                    postfix.append(stk.pop()).append(' ');
+				}
+				 // Push the current operator onto the stack.
+                stk.push(token);
+			}
+		}
+		// Pop the remaining operators from the stack and append them to the postfix expression string.
+        while (!stk.isEmpty()) { postfix.append(stk.pop()).append(' '); }
+        scanner.close();
+        return postfix.toString();
+	}	
+	
+	
 	public static int evaluatePostfix (String str) {
 		
 		//create a stack
