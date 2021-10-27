@@ -17,7 +17,24 @@
 				int val1 = stack.pop();
 				int val2 = stack.pop();
 				
-				//INSERT PRECEDENCE FUNCTION HERE
+				
+				/** Returns the precedence of an operator.
+	 			* @param operator: the operator to find its precedence
+	 			* @return: the precedence of the operator
+	 			*/
+				public static int precedence(String operator) {
+					//Set each operators precedence
+					//The higher the precedence the higher int returned
+					if (operator.equals("^")) { return 7; }
+					if (operator.equals("*") || operator.equals("/") || operator.equals("%")) { return 6; }
+					if (operator.equals("+") || operator.equals("-")) { return 5; }
+					if (operator.equals("<") || operator.equals("<=") || operator.equals(">") || operator.equals(">=")) { return 4; }
+					if (operator.equals("==") || operator.equals("!=")) { return 3; }
+					if (operator.equals("&&")) { return 2; }
+					if (operator.equals("||")) { return 1; }
+					// Throw exception for non supported operators
+					throw new IllegalArgumentException(String.format("Operator %s is not a valid operator.", operator));
+				}
 				//using a switch case until that is coded
 				switch(scan) {
 				case '+':
