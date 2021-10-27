@@ -7,9 +7,22 @@
 		for(int i = 0; i < str.length(); i++) {
 			char scan = str.charAt(i);
 			
+			if(scan == ' ') {
+				continue;
+			}
+			
 			//if scan is a number, push to stack
-			if(Character.isDigit(scan)) {
-				stack.push(scan - '0');
+			else if(Character.isDigit(scan)) {
+				int n = 0;
+				
+				//extract and store characters
+				while(Character.isDigit(scan)) {
+					n = n*10 + (int)(scan - '0');
+					i++;
+					scan = str.charAt(i);
+				}
+				i--;
+				stack.push(n);
 			}
 			
 			//else the character is an operator, pop 2 elements and apply operator
@@ -18,28 +31,11 @@
 				int val2 = stack.pop();
 				
 				
-				/** Returns the precedence of an operator.
-	 			* @param operator: the operator to find its precedence
-	 			* @return: the precedence of the operator
-	 			*/
-				public static int precedence(String operator) {
-					//Set each operators precedence
-					//The higher the precedence the higher int returned
-					if (operator.equals("^")) { return 7; }
-					if (operator.equals("*") || operator.equals("/") || operator.equals("%")) { return 6; }
-					if (operator.equals("+") || operator.equals("-")) { return 5; }
-					if (operator.equals("<") || operator.equals("<=") || operator.equals(">") || operator.equals(">=")) { return 4; }
-					if (operator.equals("==") || operator.equals("!=")) { return 3; }
-					if (operator.equals("&&")) { return 2; }
-					if (operator.equals("||")) { return 1; }
-					// Throw exception for non supported operators
-					throw new IllegalArgumentException(String.format("Operator %s is not a valid operator.", operator));
-				}
 				//using a switch case until that is coded
 				switch(scan) {
 				case '+':
-				stack.push(val2 + val1);
-				break;
+					stack.push(val2 + val1);
+					break;
 				
 				case '-':
 					stack.push(val2 +val1);
@@ -59,13 +55,39 @@
 					stack.push(val2 * val1);
 					break;
 				
-				}	
+				case '<':
+					if (val2 < val1) {
+						stack.push(1);
+						break;
+					}
+					else {
+						stack.push(0);
+						break;
+					}
+				
+				case '>':
+					if (val2 > val1) {
+						stack.push(1);
+						break;
+					}
+					else {
+						stack.push(0);
+						break;
+					}
+				
+				case '=':
+					if (val2 == val1) {
+						stack.push(1);
+						break;
+					}
+					else {
+						stack.push(0);
+						break;
+					}
+				}
 			}
 		
 		}
 		
 		return stack.pop();
-
-
-
 	}
