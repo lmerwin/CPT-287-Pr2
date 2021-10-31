@@ -15,7 +15,7 @@
 			else if(Character.isDigit(scan)) {
 				int n = 0;
 				
-				//extract and store characters
+				//extract and store characters, this is for numbers with multiple digits (10, 11, etc)
 				while(Character.isDigit(scan)) {
 					n = n*10 + (int)(scan - '0');
 					i++;
@@ -29,6 +29,7 @@
 			else {
 				int val1 = stack.pop();
 				int val2 = stack.pop();
+				StringBuilder compstr = new StringBuilder();
 				
 				
 				//using a switch case until that is coded
@@ -54,8 +55,32 @@
 				case '*':
 					stack.push(val2 * val1);
 					break;
+					
+				case '%':
+					stack.push(val2 % val1);
+					break;
 				
 				case '<':
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
+					}
+					//if it doesn't find <= then keep going
+					if (compstr.indexOf("<=") == -1) {
+						continue;
+					}
+					//if it does find <= then evaluate
+					else {
+						if (val2 <= val1) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
+					}
 					if (val2 < val1) {
 						stack.push(1);
 						break;
@@ -66,6 +91,26 @@
 					}
 				
 				case '>':
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
+					}
+					//if it doesn't find >= then keep going
+					if (compstr.indexOf(">=") == -1) {
+						continue;
+					}
+					//if it does find >= then evaluate
+					else {
+						if (val2 >= val1) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
+					}
 					if (val2 > val1) {
 						stack.push(1);
 						break;
@@ -74,16 +119,96 @@
 						stack.push(0);
 						break;
 					}
+					
 				
 				case '=':
-					if (val2 == val1) {
-						stack.push(1);
-						break;
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
 					}
+					//if it doesn't find == then keep going
+					if (compstr.indexOf("==") == -1) {
+						continue;
+					}
+					//if it does find == then evaluate
 					else {
-						stack.push(0);
-						break;
+						if (val2 == val1) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
 					}
+				
+				case '!':
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
+					}
+					//if it doesn't find != then keep going
+					if (compstr.indexOf("!=") == -1) {
+						continue;
+					}
+					//if it does find != then evaluate
+					else {
+						if (val2 != val1) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
+					}
+					
+				case '&':
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
+					}
+					//if it doesn't find && then keep going
+					if (compstr.indexOf("&&") == -1) {
+						continue;
+					}
+					//if it does find && then evaluate
+					else {
+						if (val2 == true && val1 == true) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
+					}
+					
+				case '|':
+					//empty compstr
+					compstr.setLength(0);
+					//add everything after < that isn't a digit to compstr
+					while (!Character.isDigit(scan)) {
+						compstr.append(scan);
+					}
+					//if it doesn't find || then keep going
+					if (compstr.indexOf("||") == -1) {
+						continue;
+					}
+					//if it does find <= then evaluate
+					else {
+						if (val2 == true || val1 == true) {
+							stack.push(1);
+						}
+						else {
+							stack.push(0);
+							break;
+						}
+					}
+
 				}
 			}
 		
