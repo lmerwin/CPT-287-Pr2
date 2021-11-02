@@ -273,51 +273,58 @@ public class main {
 	
 	public static String infixToPostfix(String infixExp) {
 		// Initialize an empty stack
-		Stack<String> stk = new Stack<>();
+		Stack<Character> stk = new Stack<>();
 		// Initialize postfix string
 		StringBuilder postfix = new StringBuilder();
-		Scanner scanner = new Scanner(infixExp);
-		while (scanner.hasNext()) {
-			String token = scanner.next();
-			if (Character.isDigit(token.charAt(0))) { postfix.append(token).append(' '); }
+		//Scanner scanner = new Scanner(infixExp);
+		for (int i = 0; i < infixExp.length(); i++) {
+			char token = infixExp.charAt(i);
+			if (Character.isDigit(token)) { postfix.append(token).append(' '); }
+			else if (Character.isWhitespace(token)) { continue; }
 			// opening parenthesis
-			else if (token.equals("(")) { stk.push(token); }
+			else if (token == '(') { stk.push(token); }
 			// closing parenthesis
-			else if (token.equals(")")) {
-				while (!stk.peek().equals("(")) { postfix.append(stk.pop()).append(' '); }
+			else if (token == ')') {
+				while (!stk.peek().equals('(')) { postfix.append(stk.pop()).append(' '); }
 				stk.pop();
 			}
 			// operator
 			else {
-				while (!stk.isEmpty() && !stk.peek().equals("(") && precedence(token) <= precedence(stk.peek())) {
-                    postfix.append(stk.pop()).append(' ');
+				//if operator is comparison check next character to complete the operator
+				if (token == '&' || token == '|' || token == '<' || token == '>' || token == '!') {
+					if (infixExp.charAt(i + 1) == '&' || infixExp.charAt(i + 1) == '|' || infixExp.charAt(i + 1) == '=')
+					token += infixExp.charAt(i + 1);
+					i++;
+				}
+				while (!stk.isEmpty() && !stk.peek().equals('(') && precedence(token) <= precedence(stk.peek())) {
+                    			postfix.append(stk.pop()).append(' ');
 				}
 				 // Push the current operator onto the stack.
-                stk.push(token);
+                		stk.push(token);
 			}
 		}
 		// Pop the remaining operators from the stack and append them to the postfix expression string.
-        while (!stk.isEmpty()) { postfix.append(stk.pop()).append(' '); }
-        scanner.close();
-        return postfix.toString();
+        	while (!stk.isEmpty()) { postfix.append(stk.pop()).append(' '); }
+        	//scanner.close();
+        	return postfix.toString();
 	}
 	
 	/** Returns the precedence of an operator.
 		* @param operator: the operator to find its precedence
 		* @return: the precedence of the operator
 		*/
-	public static int precedence(String operator) {
+	public static int precedence(char token) {
 		//Set each operators precedence
 		//The higher the precedence the higher int returned
-		if (operator.equals("^")) { return 7; }
-		if (operator.equals("*") || operator.equals("/") || operator.equals("%")) { return 6; }
-		if (operator.equals("+") || operator.equals("-")) { return 5; }
-		if (operator.equals("<") || operator.equals("<=") || operator.equals(">") || operator.equals(">=")) { return 4; }
-		if (operator.equals("==") || operator.equals("!=")) { return 3; }
-		if (operator.equals("&&")) { return 2; }
-		if (operator.equals("||")) { return 1; }
+		if (token == ('^')) { return 7; }
+		if (token == ('*') || token == ('/') || token == ('%')) { return 6; }
+		if (token == ('+') || token == ('-')) { return 5; }
+		if (token == ('<') || token == ('>')) { return 4; }
+		if (token == ('=') || token == ('!')) { return 3; }
+		if (token == ('&')) { return 2; }
+		if (token == ('|')) { return 1; }
 		// Throw exception for non supported operators
-		throw new IllegalArgumentException(String.format("Operator %s is not a valid operator.", operator));
+		throw new IllegalArgumentException(String.format("Operator %s is not a valid operator.", token));
 	}
 
 
