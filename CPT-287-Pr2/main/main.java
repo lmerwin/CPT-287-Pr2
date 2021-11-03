@@ -281,6 +281,9 @@ public class main {
 		Stack<String> stk = new Stack<>();
 		// Initialize postfix string
 		StringBuilder postfix = new StringBuilder();
+		
+		infixExp = format(infixExp);
+		
 		Scanner scanner = new Scanner(infixExp);
 		while (scanner.hasNext()) {
 			String token = scanner.next();
@@ -326,6 +329,55 @@ public static int precedence(String operator) {
 	// Throw exception for non supported operators
 	throw new IllegalArgumentException(String.format("Operator %s is not a valid operator.", operator));
 }
+	
+	public static String format(String original) {
+		// convert to character array
+		char[] arr = original.toCharArray();
+		// Initialize string with spaces
+		StringBuilder spaced = new StringBuilder();
+		// traverse the array
+		for (int i = 0; i < arr.length; i++) {
+			if ( arr[i] == '|' && arr[i + 1] == '|') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			else if ( arr[i] == '&' && arr[i + 1] == '&') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			else if (arr[i] == '=' && arr[i + 1] == '=') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			else if (arr[i] == '!' && arr[i + 1] == '=') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			else if (arr[i] == '>' && arr[i + 1] == '=') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			else if (arr[i] == '<' && arr[i + 1] == '=') {
+				spaced.append(arr[i]);
+				spaced.append(arr[i + 1] + " ");
+				i++;
+				i++;
+			}
+			// format with spaces
+			spaced.append(arr[i] + " ");
+		}
+		return spaced.toString();
+	}
 
 
 }
